@@ -169,4 +169,4 @@ const realizarVenta = async (req, res) => {
 
 module.exports = {
     realizarVenta
-};
+}; 

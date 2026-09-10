@@ -3,8 +3,7 @@ require('dotenv').config();
 const productosRoutes = require('./src/routes/productos.routes');
 const categoriasRoutes = require('./src/routes/categorias.routes');
 const cajerosRoutes = require('./src/routes/cajeros.routes');
-const ventaRoutes = require('./src/routes/ventas.routes');
-
+const ventaRoutes = require('./src/routes/ventas.routers');
 const app = express();
 const port = 3000;
 

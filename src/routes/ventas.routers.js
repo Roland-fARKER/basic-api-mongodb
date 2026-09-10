@@ -8,7 +8,6 @@ const {
 
 const router = Router();
 
-// Procesar una venta
 router.post(
     '/',
     realizarVenta
