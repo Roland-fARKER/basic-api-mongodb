@@ -9,10 +9,12 @@ const {
 
 const realizarVenta = async (req, res) => {
 
+    // 1. INICIAR SESIÓN
     const session = client.startSession();
 
     try {
 
+        // 2. INICIAR TRANSACCIÓN
         session.startTransaction();
 
         const db = await conectarDB();
@@ -22,6 +24,7 @@ const realizarVenta = async (req, res) => {
             cantidad
         } = req.body;
 
+        // Validaciones básicas
         if (
             !ObjectId.isValid(productoId) ||
             !cantidad ||
@@ -36,6 +39,7 @@ const realizarVenta = async (req, res) => {
             });
         }
 
+        // 3. BUSCAR PRODUCTO
         const producto = await db
             .collection('productos')
             .findOne(
@@ -57,6 +61,7 @@ const realizarVenta = async (req, res) => {
             });
         }
 
+        // Validar stock disponible
         if (producto.stock < cantidad) {
 
             await session.abortTransaction();
@@ -67,6 +72,7 @@ const realizarVenta = async (req, res) => {
             });
         }
 
+        // 4. ACTUALIZAR STOCK
         await db
             .collection('productos')
             .updateOne(
@@ -83,6 +89,7 @@ const realizarVenta = async (req, res) => {
                 }
             );
 
+        // 5. CREAR DOCUMENTO DE VENTA
         const nuevaVenta = {
 
             productoId:
@@ -104,6 +111,7 @@ const realizarVenta = async (req, res) => {
                 new Date()
         };
 
+        // 6. REGISTRAR LA VENTA
         const resultadoVenta =
             await db
                 .collection('ventas')
@@ -130,6 +138,7 @@ const realizarVenta = async (req, res) => {
 
     } catch (error) {
 
+        // 8. REVERTIR TRANSACCIÓN
         try {
 
             await session.abortTransaction();
