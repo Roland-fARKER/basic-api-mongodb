@@ -1,4 +1,4 @@
-const {connectToDatabase} = require('../config/database');
+const {conectarDB} = require('../config/database');
 const {ObjectId}= require('mongodb');
 
 const new_categories=[
@@ -23,7 +23,7 @@ const new_categories=[
 
 const cnew_bulk = async(req, res)=> {
     try{
-        const db = await connectToDatabase();
+        const db = await conectarDB();
 
         const categorias = await 
         db.collection('categorias').insertMany(new_categories);
@@ -37,7 +37,7 @@ const cnew_bulk = async(req, res)=> {
 
 const getCategorias = async(req,res)=>{
     try{
-        const db = await connectToDatabase();
+        const db = await conectarDB();
         const categorias = await
         db.collection('categorias').find().toArray();
         res.json(categorias);
@@ -52,7 +52,7 @@ const getCategorias = async(req,res)=>{
 const getCategoriaById = async (req, res) => {
     try{
 
-        const db = await connectToDatabase();
+        const db = await conectarDB();
         const { id } = req.params;
 
         const categoria = await 
@@ -69,7 +69,7 @@ const getCategoriaById = async (req, res) => {
 
 const createCategoria = async (req, res) => {
     try {
-        const db = await connectToDatabase();
+        const db = await conectarDB();
         const newCategoria = req.body; 
 
         const result = await 
@@ -84,7 +84,7 @@ const createCategoria = async (req, res) => {
 
 const createCategorias = async (req, res) => {
     try{
-        const db = await connectToDatabase();
+        const db = await conectarDB();
         const newCategorias = req.body; 
         if (!Array.isArray(newCategorias) || newCategorias.length === 0) {
             return res.status(400).json({ error: 'Invalid input. Expected an array of categorias.' });
@@ -102,7 +102,7 @@ const createCategorias = async (req, res) => {
 
 const updateCategoria = async (req, res) => {
     try{
-        const db = await connectToDatabase();
+        const db = await conectarDB();
         const { id } = req.params;
         
         const result = await 
@@ -123,7 +123,7 @@ const updateCategoria = async (req, res) => {
 
 const deleteCategoria = async (req, res) => {
     try{
-        const db = await connectToDatabase();
+        const db = await conectarDB();
         const { id } = req.params;
         
         //SINTAXIS PARA ELIMINAR UN PRODUCTO POR SU ID(MONGO)

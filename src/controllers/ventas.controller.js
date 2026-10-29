@@ -21,12 +21,14 @@ const realizarVenta = async (req, res) => {
 
         const {
             productoId,
+            cajeroId,
             cantidad
         } = req.body;
 
         // Validaciones básicas
         if (
             !ObjectId.isValid(productoId) ||
+            (cajeroId && !ObjectId.isValid(cajeroId)) ||
             !cantidad ||
             cantidad <= 0
         ) {
@@ -98,6 +100,9 @@ const realizarVenta = async (req, res) => {
             nombreProducto:
                 producto.nombre,
 
+            cajeroId:
+                cajeroId ? new ObjectId(cajeroId) : null,
+
             cantidadVendida:
                 cantidad,
 
@@ -167,6 +172,48 @@ const realizarVenta = async (req, res) => {
     }
 };
 
+const getVentas = async (req, res) => {
+    try {
+        const db = await conectarDB();
+
+        const ventas = await db
+            .collection('ventas')
+            .find()
+            .toArray();
+
+        res.json(ventas);
+
+    } catch (error) {
+        console.error('Error fetching ventas:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+const getVentaById = async (req, res) => {
+    try {
+        const db = await conectarDB();
+        const { id } = req.params;
+
+        if (!ObjectId.isValid(id)) {
+            return res.status(400).json({ error: 'ID inválido' });
+        }
+
+        const venta = await db
+            .collection('ventas')
+            .findOne({ _id: new ObjectId(id) });
+
+        if (!venta) return res.status(404).json({ error: 'Venta not found' });
+
+        res.json(venta);
+
+    } catch (error) {
+        console.error('Error fetching venta by ID:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
 module.exports = {
-    realizarVenta
+    realizarVenta,
+    getVentas,
+    getVentaById
 }; 

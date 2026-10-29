@@ -1,24 +1,24 @@
-const { connectToDatabase } = require('../config/database');
+const { conectarDB } = require('../config/database');
 const { ObjectId } = require('mongodb');
 
 const  new_product=[
     {
-        Nombre:'caramelo',precio : 5 , categoria:'dulce'
+        nombre:'caramelo',precio : 5 , categoria:'dulce', stock: 100
     },
-    
+
     {
-        Nombre:'manzana',precio : 20 , categoria:'fruta'
+        nombre:'manzana',precio : 20 , categoria:'fruta', stock: 50
     },
-    
+
     {
-        Nombre:'zapato',precio : 500 , categoria:'calzado'
+        nombre:'zapato',precio : 500 , categoria:'calzado', stock: 10
     }
 
 ];
 
 const new_bulk = async(req, res)=> {
     try{
-        const db = await connectToDatabase();
+        const db = await conectarDB();
 
         const productos = await 
         db.collection('productos').insertMany(new_product);
@@ -32,7 +32,7 @@ const new_bulk = async(req, res)=> {
 const getProductos = async (req, res) => {
     try {
         //ESPERAMOS CONECTARNOS A MONGODB Y OBTENER LA BASE DE DATOS
-        const db = await connectToDatabase();
+        const db = await conectarDB();
 
         const productos = await 
         //SINTAXIS PARA OBTENER TODOS LOS PRODUCTOS DE LA COLECCIÓN "productos"
@@ -50,7 +50,7 @@ const getProductos = async (req, res) => {
 const getProductoById = async (req, res) => {
     try{
 
-        const db = await connectToDatabase();
+        const db = await conectarDB();
         const { id } = req.params;
 
         //SINTAXIS PARA OBTENER UN PRODUCTO POR SU ID(MONGO)
@@ -69,7 +69,7 @@ const getProductoById = async (req, res) => {
 
 const createProducto = async (req, res) => {
     try {
-        const db = await connectToDatabase();
+        const db = await conectarDB();
         const newProducto = req.body; //{nombre: 'Producto 1', precio: 100, }
 
         //SINTAXIS PARA INSERTAR UN NUEVO PRODUCTO EN LA COLECCIÓN "productos"(Mongo)
@@ -86,7 +86,7 @@ const createProducto = async (req, res) => {
 
 const createProductos = async (req, res) => {
     try{
-        const db = await connectToDatabase();
+        const db = await conectarDB();
         const newProductos = req.body; //[{nombre: 'Producto 1', precio: 100, }, {nombre: 'Producto 2', precio: 200, }]
 
         if (!Array.isArray(newProductos) || newProductos.length === 0) {
@@ -106,7 +106,7 @@ const createProductos = async (req, res) => {
 
 const updateProducto = async (req, res) => {
     try{
-        const db = await connectToDatabase();
+        const db = await conectarDB();
         const { id } = req.params;
         
         //SINTAXIS PARA ACTUALIZAR UN PRODUCTO POR SU ID(MONGO)
@@ -128,7 +128,7 @@ const updateProducto = async (req, res) => {
 
 const deleteProducto = async (req, res) => {
     try{
-        const db = await connectToDatabase();
+        const db = await conectarDB();
         const { id } = req.params;
         
         //SINTAXIS PARA ELIMINAR UN PRODUCTO POR SU ID(MONGO)

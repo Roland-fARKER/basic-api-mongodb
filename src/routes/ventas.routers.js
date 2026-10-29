@@ -3,10 +3,15 @@ const {
 } = require('express');
 
 const {
-    realizarVenta
+    realizarVenta,
+    getVentas,
+    getVentaById
 } = require('../controllers/ventas.controller');
 
 const router = Router();
+
+router.get('/', getVentas);
+router.get('/:id', getVentaById);
 
 router.post(
     '/',

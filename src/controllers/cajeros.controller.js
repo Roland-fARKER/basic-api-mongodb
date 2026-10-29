@@ -1,4 +1,4 @@
-const {connectToDatabase} = require('../config/database');
+const {conectarDB} = require('../config/database');
 const {ObjectId}= require('mongodb');
 
 const new_cajeros=[
@@ -23,7 +23,7 @@ const new_cajeros=[
 
 const canew_bulk = async(req, res)=> {
     try{
-        const db = await connectToDatabase();
+        const db = await conectarDB();
 
         const cajeros = await 
         db.collection('cajeros').insertMany(new_cajeros);
@@ -37,7 +37,7 @@ const canew_bulk = async(req, res)=> {
 
 const getCajeros = async(req,res)=>{
     try{
-        const db = await connectToDatabase();
+        const db = await conectarDB();
         const cajeros = await
         db.collection('cajeros').find().toArray();
         res.json(cajeros);
@@ -52,7 +52,7 @@ const getCajeros = async(req,res)=>{
 const getCajerosById = async (req, res) => {
     try{
 
-        const db = await connectToDatabase();
+        const db = await conectarDB();
         const { id } = req.params;
 
         const cajero = await 
@@ -69,7 +69,7 @@ const getCajerosById = async (req, res) => {
 
 const createCajero = async (req, res) => {
     try {
-        const db = await connectToDatabase();
+        const db = await conectarDB();
         const newCajero = req.body; 
 
         const result = await 
@@ -84,7 +84,7 @@ const createCajero = async (req, res) => {
 
 const createCajeros = async (req, res) => {
     try{
-        const db = await connectToDatabase();
+        const db = await conectarDB();
         const newCajeros = req.body; 
         if (!Array.isArray(newCajeros) || newCajeros.length === 0) {
             return res.status(400).json({ error: 'Invalid input. Expected an array of cajeros.' });
@@ -102,7 +102,7 @@ const createCajeros = async (req, res) => {
 
 const updateCajeros = async (req, res) => {
     try{
-        const db = await connectToDatabase();
+        const db = await conectarDB();
         const { id } = req.params;
         
         const result = await 
@@ -123,7 +123,7 @@ const updateCajeros = async (req, res) => {
 
 const deleteCajeros = async (req, res) => {
     try{
-        const db = await connectToDatabase();
+        const db = await conectarDB();
         const { id } = req.params;
         
         //SINTAXIS PARA ELIMINAR UN PRODUCTO POR SU ID(MONGO)
